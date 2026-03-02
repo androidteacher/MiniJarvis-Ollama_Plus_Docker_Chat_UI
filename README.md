@@ -9,7 +9,7 @@ Ollama-in-a-Box gives anyone a dead-simple way to spin up a local Large Language
 
 ---
 
-### 🛑 Heads Up
+### Heads Up !
 
 **System Requirements:**
 - **Ubuntu/Kali VM** with 30G-40G disk space (to be safe)
