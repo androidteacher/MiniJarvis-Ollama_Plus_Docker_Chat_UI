@@ -96,6 +96,91 @@
       background: var(--accent-glow);
     }
 
+    /* ---- Ollama_Info dropdown ---- */
+    .info-dropdown {
+      position: relative;
+    }
+
+    .info-dropdown-btn {
+      background: var(--bg);
+      color: var(--text-muted);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 6px 12px;
+      font-family: inherit;
+      font-size: .82rem;
+      font-weight: 500;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: color .2s, border-color .2s, background .2s;
+    }
+
+    .info-dropdown-btn:hover,
+    .info-dropdown-btn.open {
+      color: var(--text);
+      border-color: var(--accent);
+      background: var(--accent-glow);
+    }
+
+    .info-dropdown-btn .arrow {
+      font-size: .6rem;
+      transition: transform .2s;
+    }
+
+    .info-dropdown-btn.open .arrow {
+      transform: rotate(180deg);
+    }
+
+    .info-dropdown-menu {
+      display: none;
+      position: absolute;
+      top: calc(100% + 8px);
+      right: 0;
+      min-width: 180px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      box-shadow: 0 12px 40px rgba(0, 0, 0, .5);
+      z-index: 110;
+      overflow: hidden;
+    }
+
+    .info-dropdown-menu.open {
+      display: block;
+    }
+
+    .info-dropdown-menu a {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 16px;
+      color: var(--text-muted);
+      font-size: .82rem;
+      font-weight: 500;
+      text-decoration: none;
+      border: none;
+      border-radius: 0;
+      border-bottom: 1px solid var(--border);
+      transition: background .15s, color .15s;
+    }
+
+    .info-dropdown-menu a:last-child {
+      border-bottom: none;
+    }
+
+    .info-dropdown-menu a:hover {
+      background: var(--accent-glow);
+      color: var(--text);
+      border-color: transparent;
+    }
+
+    .info-dropdown-menu a .menu-icon {
+      font-size: .9rem;
+      flex-shrink: 0;
+    }
+
     /* ---- Model Manager ---- */
     .model-manager {
       position: relative;
@@ -701,7 +786,9 @@
     }
 
     /* ---- API Info overlay ---- */
-    #api-overlay {
+    #api-overlay,
+    #codeflow-overlay,
+    #llmcomp-overlay {
       display: none;
       position: fixed;
       inset: 0;
@@ -711,7 +798,9 @@
       overflow: hidden;
     }
 
-    #api-overlay.open {
+    #api-overlay.open,
+    #codeflow-overlay.open,
+    #llmcomp-overlay.open {
       display: flex;
     }
 
@@ -768,12 +857,69 @@
       background: var(--accent-glow);
     }
 
-    #api-body {
+    #api-body,
+    #codeflow-body,
+    #llmcomp-body {
       flex: 1;
       overflow-y: auto;
       padding: 32px 24px;
       scrollbar-width: thin;
       scrollbar-color: var(--surface2) transparent;
+    }
+
+    /* ---- LLM Comparison Table ---- */
+    .llm-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: .83rem;
+      line-height: 1.55;
+    }
+
+    .llm-table th {
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text-muted);
+      font-weight: 600;
+      font-size: .72rem;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+      padding: 10px 14px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .llm-table td {
+      padding: 12px 14px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+      vertical-align: top;
+      color: var(--text);
+    }
+
+    .llm-table tbody tr:last-child td {
+      border-bottom: none;
+    }
+
+    .llm-table tbody tr:hover td {
+      background: rgba(255, 255, 255, 0.025);
+    }
+
+    .llm-badge {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 6px;
+      font-size: .75rem;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .param-cell {
+      font-family: 'Courier New', monospace;
+      font-size: .8rem;
+      color: var(--accent);
+      white-space: nowrap;
+    }
+
+    .weak-cell {
+      color: var(--text-muted);
     }
 
     .api-content {
@@ -996,10 +1142,412 @@
         </div>
       </div>
       <a href="https://github.com/androidteacher/ollama-chat-docker-deploy-llama3.2-1b" target="_blank">GitHub</a>
-      <a href="#" id="api-info-btn">API Info</a>
+      <div class="info-dropdown" id="info-dropdown">
+        <button class="info-dropdown-btn" id="info-dropdown-btn">
+          Ollama_Info <span class="arrow">▼</span>
+        </button>
+        <div class="info-dropdown-menu" id="info-dropdown-menu">
+          <a href="#" id="api-info-btn"><span class="menu-icon">🔌</span> API Info</a>
+          <a href="#" id="codeflow-btn"><span class="menu-icon">🔁</span> Web UI Code Flow</a>
+          <a href="#" id="llmcomp-btn"><span class="menu-icon"><svg viewBox="0 0 24 24" width="14" height="14"
+                style="fill:#60a5fa;vertical-align:middle;margin-bottom:2px">
+                <path d="M7 2v11h3v9l7-12h-4l4-8z" />
+              </svg></span> Small LLMs Compared</a>
+        </div>
+      </div>
       <a href="https://cyberlessons101.com" target="_blank">CyberLessons101</a>
     </div>
   </header>
+
+  <!-- Small LLMs Compared Overlay -->
+  <div id="llmcomp-overlay">
+    <div class="api-header">
+      <div class="api-header-left">
+        <svg class="api-header-icon" viewBox="0 0 24 24">
+          <path
+            d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 3c1.93 0 3.5 1.57 3.5 3.5S13.93 13 12 13s-3.5-1.57-3.5-3.5S10.07 6 12 6zm7 13H5v-.23c0-.62.28-1.2.76-1.58C7.47 15.82 9.64 15 12 15s4.53.82 6.24 2.19c.48.38.76.97.76 1.58V19z" />
+        </svg>
+        <div>
+          <h2>Small LLMs Compared</h2>
+          <div class="api-subtitle">Models under 7B parameters — speed, strengths, and trade-offs explained</div>
+        </div>
+      </div>
+      <button class="api-close-btn" id="llmcomp-close-btn">✕ Close</button>
+    </div>
+    <div id="llmcomp-body">
+      <div class="api-content">
+
+        <!-- Intro -->
+        <div class="api-intro">
+          <h1>Small LLMs Compared</h1>
+          <p>Several popular models under 7B parameters are available in the Ollama library, each balancing size, speed,
+            and specialized capabilities. These <strong>"small"</strong> models are designed to run efficiently on local
+            hardware while still performing tasks like coding, reasoning, and summarization.</p>
+          <div class="api-base-url">📊 All models below run locally via Ollama — no cloud required</div>
+        </div>
+
+        <!-- Comparison table -->
+        <div class="api-section">
+          <div class="api-section-title"><span class="section-num">★</span> Side-by-Side Comparison</div>
+          <div class="api-card" style="overflow-x:auto">
+            <table class="llm-table">
+              <thead>
+                <tr>
+                  <th>Model</th>
+                  <th>Parameters</th>
+                  <th>Primary Strengths</th>
+                  <th>Notable Weaknesses</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><span class="llm-badge"
+                      style="background:rgba(74,222,128,.15);color:#4ade80;border:1px solid rgba(74,222,128,.3)">Llama
+                      3.2</span></td>
+                  <td class="param-cell">1B, 3B</td>
+                  <td>Extremely fast; excellent for mobile/edge use; strong at summarization and tool use.</td>
+                  <td class="weak-cell">Reasoning trails 8B+ models; struggles with high-density, long-context RAG.</td>
+                </tr>
+                <tr>
+                  <td><span class="llm-badge"
+                      style="background:rgba(96,165,250,.15);color:#60a5fa;border:1px solid rgba(96,165,250,.3)">Phi-3.5
+                      Mini</span></td>
+                  <td class="param-cell">3.8B</td>
+                  <td>Massive 128K context window; state-of-the-art reasoning for its size.</td>
+                  <td class="weak-cell">Primarily English-focused; coding mostly limited to Python.</td>
+                </tr>
+                <tr>
+                  <td><span class="llm-badge"
+                      style="background:rgba(251,191,36,.15);color:#fbbf24;border:1px solid rgba(251,191,36,.3)">Qwen
+                      2.5</span></td>
+                  <td class="param-cell">0.5B – 7B</td>
+                  <td>Dominates coding and math benchmarks; strong multilingual support.</td>
+                  <td class="weak-cell">7B variants may require 8 GB+ RAM — more than ultra-light peers.</td>
+                </tr>
+                <tr>
+                  <td><span class="llm-badge"
+                      style="background:rgba(167,139,250,.15);color:#a78bfa;border:1px solid rgba(167,139,250,.3)">Gemma
+                      2</span></td>
+                  <td class="param-cell">2B</td>
+                  <td>High safety alignment; excellent multi-step instruction following; low toxicity.</td>
+                  <td class="weak-cell">Small 8K context window; higher hallucination on symbolic data (numbers/dates).
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="llm-badge"
+                      style="background:rgba(248,113,113,.15);color:#f87171;border:1px solid rgba(248,113,113,.3)">DeepSeek
+                      R1</span></td>
+                  <td class="param-cell">1.5B</td>
+                  <td>Exceptional Chain-of-Thought reasoning; very strong at math and logic.</td>
+                  <td class="weak-cell">Slower "thinking" process; can struggle with repetition or language mixing.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Section 1 -->
+        <div class="api-section">
+          <div class="api-section-title"><span class="section-num">1</span> Context &amp; Document Handling</div>
+          <div class="api-card">
+            <div class="api-card-header" style="border-bottom:none">
+              <div class="api-card-meta">
+                <div class="api-card-desc" style="font-size:.88rem">
+                  <p style="margin-bottom:12px">How much text can the model <em>see at once</em> — this determines
+                    whether it can work with long documents or only short prompts.</p>
+                  <ul style="padding-left:1.2em;line-height:2.1">
+                    <li>🏆 <strong>Phi-3.5 Mini</strong> is the clear leader here — its <strong>128K token context
+                        window</strong> means it can process book-length documents in a single call. Perfect for RAG
+                      pipelines and long-form analysis.</li>
+                    <li>⚠️ <strong>Gemma 2 2B</strong> is significantly more limited with a default <strong>8K token
+                        context</strong>, making it less suitable for long-form Retrieval-Augmented Generation (RAG).
+                      Use it for short, focused tasks instead.</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 2 -->
+        <div class="api-section">
+          <div class="api-section-title"><span class="section-num">2</span> Coding &amp; Technical Tasks</div>
+          <div class="api-card">
+            <div class="api-card-header" style="border-bottom:none">
+              <div class="api-card-meta">
+                <div class="api-card-desc" style="font-size:.88rem">
+                  <p style="margin-bottom:12px">Which model should you pick when generating code, writing SQL, or
+                    solving math problems?</p>
+                  <ul style="padding-left:1.2em;line-height:2.1">
+                    <li>🏆 <strong>Qwen 2.5</strong> (especially Coder variants) <strong>outperforms nearly all other
+                        sub-7B models</strong> on code generation and mathematical reasoning benchmarks. First choice
+                      for technical work.</li>
+                    <li>⚠️ <strong>Llama 3.2 1B/3B</strong> can handle basic text-to-SQL or simple scripts but is better
+                      suited for general assistant tasks than deep technical development.</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 3 -->
+        <div class="api-section">
+          <div class="api-section-title"><span class="section-num">3</span> Speed vs. Reasoning Quality</div>
+          <div class="api-card">
+            <div class="api-card-header" style="border-bottom:none">
+              <div class="api-card-meta">
+                <div class="api-card-desc" style="font-size:.88rem">
+                  <p style="margin-bottom:12px">There is an inherent trade-off: faster models answer quickly but reason
+                    less deeply; slower models think harder and produce more accurate results.</p>
+                  <ul style="padding-left:1.2em;line-height:2.1">
+                    <li>⚡ <strong>Llama 3.2 1B</strong> offers the fastest response times of the group — often
+                      generating text faster than you can read it. Ideal when speed matters more than depth.</li>
+                    <li>🧠 <strong>DeepSeek R1 (1.5B)</strong> uses <em>"thinking tokens"</em> — it explicitly works
+                      through its reasoning step-by-step before answering. This makes it more reliable for complex logic
+                      problems, but noticeably slower to produce a final answer.</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 4 -->
+        <div class="api-section">
+          <div class="api-section-title"><span class="section-num">4</span> Safety &amp; Reliability</div>
+          <div class="api-card">
+            <div class="api-card-header" style="border-bottom:none">
+              <div class="api-card-meta">
+                <div class="api-card-desc" style="font-size:.88rem">
+                  <p style="margin-bottom:12px">How well does the model resist harmful prompts, avoid hallucinations,
+                    and stay on topic?</p>
+                  <ul style="padding-left:1.2em;line-height:2.1">
+                    <li>🛡️ <strong>Gemma 2 2B</strong> is built with rigorous safety filtering from Google. It is the
+                      top choice for applications requiring strict content moderation or safety policies — low toxicity
+                      and high instruction-following discipline.</li>
+                    <li>🛡️ <strong>Llama 3.2</strong> also shows strong resilience against malicious prompts
+                      (<strong>96–98% safe</strong> in standard benchmarks) while maintaining its speed advantage —
+                      making it a well-rounded choice when both safety and performance are needed.</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /.api-content -->
+    </div><!-- /#llmcomp-body -->
+  </div><!-- /#llmcomp-overlay -->
+
+  <!-- Web UI Code Flow Overlay -->
+  <div id="codeflow-overlay">
+    <div class="api-header">
+      <div class="api-header-left">
+        <svg class="api-header-icon" viewBox="0 0 24 24">
+          <path
+            d="M17 12h-5v5h5v-5zM16 1v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2h-1V1h-2zm3 18H5V8h14v11z" />
+        </svg>
+        <div>
+          <h2>Web UI Code Flow</h2>
+          <div class="api-subtitle">How a message travels from your keyboard to Ollama and back — step by step</div>
+        </div>
+      </div>
+      <button class="api-close-btn" id="codeflow-close-btn">✕ Close</button>
+    </div>
+    <div id="codeflow-body">
+      <div class="api-content">
+
+        <!-- Intro -->
+        <div class="api-intro">
+          <h1>Web UI Code Flow</h1>
+          <p>When you type a message and hit Send, several things happen in sequence inside <code>index.html</code>.
+            This page walks you through every step, with the actual code from the file so you can follow along.</p>
+          <div class="api-base-url">📄 All code lives inside the &lt;script&gt; tag → <code>send()</code> function</div>
+        </div>
+
+        <!-- Step 1 -->
+        <div class="api-section">
+          <div class="api-section-title"><span class="section-num">1</span> Capturing the User Input</div>
+          <div class="api-card">
+            <div class="api-card-header" style="border-bottom:none">
+              <div class="api-card-meta">
+                <div class="api-card-desc" style="font-size:.88rem">
+                  <p style="margin-bottom:10px">The process starts the moment you click <strong>Send</strong> or press
+                    <strong>Enter</strong>.
+                  </p>
+                  <ul style="padding-left:1.2em;line-height:2">
+                    <li><strong>Extraction</strong> — grabs the text from the <code>&lt;textarea id="prompt"&gt;</code>
+                      element.</li>
+                    <li><strong>Validation</strong> — if the box is empty, the AI is already busy, or no model is
+                      selected, it stops immediately.</li>
+                    <li><strong>UI Update</strong> — calls <code>appendMsg('user', text)</code> to show your bubble in
+                      the chat, then clears the input box.</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div class="api-code-block">
+              <button class="api-copy-btn">Copy</button>
+              <pre><code>const text = input.value.trim();
+if (!text || busy || !activeModel) return;
+
+appendMsg('user', text); // Show your message in the chat
+input.value = '';         // Clear the input box</code></pre>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="api-section">
+          <div class="api-section-title"><span class="section-num">2</span> Sending the Prompt to Ollama (The API
+            Request)</div>
+          <div class="api-card">
+            <div class="api-card-header" style="border-bottom:none">
+              <div class="api-card-meta">
+                <div class="api-card-desc" style="font-size:.88rem">
+                  <p style="margin-bottom:10px">Your prompt is sent to the local Ollama server using the browser's
+                    built-in <code>fetch</code> API.</p>
+                  <ul style="padding-left:1.2em;line-height:2">
+                    <li><strong>Endpoint</strong> — targets <code>/api/generate</code> on the local server.</li>
+                    <li><strong>Method</strong> — uses an HTTP <code>POST</code> request.</li>
+                    <li><strong>Payload</strong> — <code>JSON.stringify()</code> converts a JS object into a JSON string
+                      containing:
+                      <ul style="margin-top:4px">
+                        <li><code>model</code> — the currently selected model (e.g., <code>llama3.2:1b</code>).</li>
+                        <li><code>prompt</code> — the text you typed.</li>
+                        <li><code>stream: false</code> — wait for the <em>complete</em> answer before sending anything
+                          back (no word-by-word streaming).</li>
+                      </ul>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div class="api-code-block">
+              <button class="api-copy-btn">Copy</button>
+              <pre><code>const res = await fetch('/api/generate', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+    model: activeModel,  // e.g. "llama3.2:1b"
+    prompt: text,        // what you typed
+    stream: false        // wait for the full reply
+  })
+});</code></pre>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="api-section">
+          <div class="api-section-title"><span class="section-num">3</span> Receiving and Parsing the JSON Response
+          </div>
+          <div class="api-card">
+            <div class="api-card-header" style="border-bottom:none">
+              <div class="api-card-meta">
+                <div class="api-card-desc" style="font-size:.88rem">
+                  <p style="margin-bottom:10px">Once Ollama finishes generating, it sends the result back as a JSON
+                    object.</p>
+                  <ul style="padding-left:1.2em;line-height:2">
+                    <li><strong>Parsing</strong> — <code>await res.json()</code> converts the raw HTTP response body
+                      into a usable JavaScript object called <code>data</code>.</li>
+                    <li><strong>Accessing the text</strong> — the Ollama API stores the generated answer in a key named
+                      <code>response</code>, so the code reads <code>data.response</code>.
+                    </li>
+                    <li>The spinner ("Thinking…") is removed as soon as the data arrives.</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div class="api-code-block">
+              <button class="api-copy-btn">Copy</button>
+              <pre><code>const data = await res.json();
+
+spinnerEl.remove();  // Kill the "Thinking..." animation
+
+// data.response holds the AI's answer
+appendMsg('bot', data.response || '(no response)');</code></pre>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 4 -->
+        <div class="api-section">
+          <div class="api-section-title"><span class="section-num">4</span> Rendering the Response as Formatted HTML
+          </div>
+          <div class="api-card">
+            <div class="api-card-header" style="border-bottom:none">
+              <div class="api-card-meta">
+                <div class="api-card-desc" style="font-size:.88rem">
+                  <p style="margin-bottom:10px">The text isn't injected raw — it gets converted from Markdown to rich
+                    HTML first.</p>
+                  <ul style="padding-left:1.2em;line-height:2">
+                    <li><strong>marked.js</strong> — the page loads the <a href="https://marked.js.org" target="_blank"
+                        style="color:var(--accent)">marked.js</a> library via CDN. It understands Markdown syntax (bold,
+                      code blocks, lists, headers).</li>
+                    <li><strong>Conversion</strong> — <code>marked.parse(text)</code> turns the AI's Markdown string
+                      into proper HTML tags.</li>
+                    <li><strong>Injection</strong> — the HTML is inserted into the chat bubble using
+                      <code>.innerHTML</code>, so code blocks, bold text, and lists render visually.
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div class="api-code-block">
+              <button class="api-copy-btn">Copy</button>
+              <pre><code>// Inside appendMsg() — called with role='bot'
+const bubble = document.createElement('div');
+bubble.className = 'bubble';
+
+if (role === 'bot') {
+  // marked.parse() converts Markdown → HTML
+  bubble.innerHTML = marked.parse(text);
+} else {
+  bubble.textContent = text; // user messages stay as plain text
+}</code></pre>
+            </div>
+          </div>
+        </div>
+
+        <!-- Full flow diagram -->
+        <div class="api-section">
+          <div class="api-section-title"><span class="section-num">✦</span> Complete Data Flow at a Glance</div>
+          <div class="api-card">
+            <div class="api-code-block">
+              <pre><code>[ You type & press Send ]
+        │
+        ▼
+[ input.value.trim() ]  ──── empty / busy? ──► STOP
+        │ valid
+        ▼
+[ appendMsg('user', text) ]  ◄── your bubble appears
+        │
+        ▼
+[ fetch POST /api/generate ]
+    body: { model, prompt, stream:false }
+        │
+        ▼  (Ollama processes...)
+[ HTTP Response: JSON ]
+    { "response": "Here is my answer..." }
+        │
+        ▼
+[ res.json() → data.response ]
+        │
+        ▼
+[ marked.parse(data.response) ]
+    Markdown  →  HTML
+        │
+        ▼
+[ bubble.innerHTML = html ]  ◄── bot bubble appears</code></pre>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /.api-content -->
+    </div><!-- /#codeflow-body -->
+  </div><!-- /#codeflow-overlay -->
 
   <!-- API Info Overlay -->
   <div id="api-overlay">
@@ -1024,7 +1572,8 @@
           <h1>Ollama API Reference Guide</h1>
           <p>Every request targets the Ollama server running locally. By default it listens on port
             <strong>11434</strong>. All POST bodies are JSON. Use the <strong>Copy</strong> button on any block to grab
-            the exact curl command.</p>
+            the exact curl command.
+          </p>
           <div class="api-base-url">Base URL: http://localhost:11434</div>
         </div>
 
@@ -1206,7 +1755,8 @@
                 <div class="api-card-endpoint">/api/delete</div>
                 <div class="api-card-desc">Permanently removes a model from local storage, freeing disk space.
                   <strong>This cannot be undone</strong> — you'd have to re-download the model. Use
-                  <code>-X DELETE</code> with curl because this endpoint uses the HTTP DELETE method.</div>
+                  <code>-X DELETE</code> with curl because this endpoint uses the HTTP DELETE method.
+                </div>
               </div>
             </div>
             <div class="api-code-block">
@@ -1229,7 +1779,8 @@
                 <div class="api-card-desc">Converts text into a numerical vector (embedding). Embeddings capture the
                   <em>meaning</em> of text in a way that machines can compare and search. This is the foundation of RAG
                   (Retrieval-Augmented Generation) and vector database workflows — the model "understands" your document
-                  so you can search it by concept instead of keyword.</div>
+                  so you can search it by concept instead of keyword.
+                </div>
               </div>
             </div>
             <div class="api-code-block">
@@ -1613,6 +2164,21 @@
     /* Enter key submits in modal */
     ryoInput.addEventListener('keydown', e => { if (e.key === 'Enter') ryoInstall.click(); });
 
+    /* ---- Ollama_Info dropdown ---- */
+    const infoDropdownBtn = document.getElementById('info-dropdown-btn');
+    const infoDropdownMenu = document.getElementById('info-dropdown-menu');
+
+    infoDropdownBtn.addEventListener('click', e => {
+      e.stopPropagation();
+      const isOpen = infoDropdownMenu.classList.toggle('open');
+      infoDropdownBtn.classList.toggle('open', isOpen);
+    });
+    document.addEventListener('click', () => {
+      infoDropdownMenu.classList.remove('open');
+      infoDropdownBtn.classList.remove('open');
+    });
+    infoDropdownMenu.addEventListener('click', e => e.stopPropagation());
+
     /* ---- API Info overlay ---- */
     const apiOverlay = document.getElementById('api-overlay');
     const apiInfoBtn = document.getElementById('api-info-btn');
@@ -1620,6 +2186,8 @@
 
     function openApiOverlay(e) {
       e.preventDefault();
+      infoDropdownMenu.classList.remove('open');
+      infoDropdownBtn.classList.remove('open');
       apiOverlay.classList.add('open');
       document.getElementById('api-body').scrollTop = 0;
     }
@@ -1628,10 +2196,46 @@
     apiInfoBtn.addEventListener('click', openApiOverlay);
     apiCloseBtn.addEventListener('click', closeApiOverlay);
 
-    /* Close overlay with Escape key */
-    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeApiOverlay(); });
+    /* ---- Web UI Code Flow overlay ---- */
+    const codeflowOverlay = document.getElementById('codeflow-overlay');
+    const codeflowBtn = document.getElementById('codeflow-btn');
+    const codeflowCloseBtn = document.getElementById('codeflow-close-btn');
 
-    /* Copy button logic */
+    function openCodeflowOverlay(e) {
+      e.preventDefault();
+      infoDropdownMenu.classList.remove('open');
+      infoDropdownBtn.classList.remove('open');
+      codeflowOverlay.classList.add('open');
+      document.getElementById('codeflow-body').scrollTop = 0;
+    }
+    function closeCodeflowOverlay() { codeflowOverlay.classList.remove('open'); }
+
+    codeflowBtn.addEventListener('click', openCodeflowOverlay);
+    codeflowCloseBtn.addEventListener('click', closeCodeflowOverlay);
+
+    /* ---- Small LLMs Compared overlay ---- */
+    const llmcompOverlay = document.getElementById('llmcomp-overlay');
+    const llmcompBtn = document.getElementById('llmcomp-btn');
+    const llmcompCloseBtn = document.getElementById('llmcomp-close-btn');
+
+    function openLlmcompOverlay(e) {
+      e.preventDefault();
+      infoDropdownMenu.classList.remove('open');
+      infoDropdownBtn.classList.remove('open');
+      llmcompOverlay.classList.add('open');
+      document.getElementById('llmcomp-body').scrollTop = 0;
+    }
+    function closeLlmcompOverlay() { llmcompOverlay.classList.remove('open'); }
+
+    llmcompBtn.addEventListener('click', openLlmcompOverlay);
+    llmcompCloseBtn.addEventListener('click', closeLlmcompOverlay);
+
+    /* Close any overlay with Escape key */
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') { closeApiOverlay(); closeCodeflowOverlay(); closeLlmcompOverlay(); }
+    });
+
+    /* Copy button logic (covers both overlays) */
     document.querySelectorAll('.api-copy-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         const code = btn.closest('.api-code-block').querySelector('code').textContent;
