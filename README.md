@@ -21,7 +21,7 @@ Ollama-in-a-Box gives anyone a dead-simple way to spin up a local Large Language
 
 ### Prerequisites
 
-- An **Ubuntu** VM (or similar Debian-based distro)
+-  Ubuntu/Kali VM (See Requirements Above)
 - **Docker** installed — if it isn't, the setup script will let you know and point you to an easy one-liner
 
 ### 1. Run the Setup Script
