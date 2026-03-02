@@ -26,7 +26,7 @@ sudo ./setup.sh
 The script will:
 1. Check that Docker is available (and suggest `sudo apt install docker.io -y` if it isn't)
 2. Pull and launch the **Ollama** container
-3. Download the **llama3.2:1b** model (~1 GB)
+3. Download the **llama3.2:1b** model (~1 GB) by default, but you can choose other models from a preset list or Ollama's library.
 4. Build and launch the **Chat Web UI** container
 
 ### 2. Start Chatting
