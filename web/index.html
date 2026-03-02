@@ -7,7 +7,9 @@
   <title>Mini_Jarvis</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+    rel="stylesheet" />
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <style>
     *,
@@ -19,25 +21,49 @@
     }
 
     :root {
-      --bg: #1a1a2e;
-      --surface: #16213e;
-      --surface2: #0f3460;
-      --accent: #e94560;
-      --accent-glow: rgba(233, 69, 96, 0.25);
-      --text: #eaeaea;
-      --text-muted: #8892a4;
-      --user-bubble: #0f3460;
-      --bot-bubble: #1a1a2e;
-      --border: rgba(255, 255, 255, 0.06);
+      --bg: #050810;
+      --surface: #090d1a;
+      --surface2: #0a1628;
+      --accent: #00d4ff;
+      --accent-glow: rgba(0, 212, 255, 0.18);
+      --accent2: #0066ff;
+      --text: #e8f4ff;
+      --text-muted: #5a7a9a;
+      --user-bubble: #0a1628;
+      --bot-bubble: #07090f;
+      --border: rgba(0, 212, 255, 0.1);
       --radius: 14px;
     }
 
     html,
     body {
       height: 100%;
-      font-family: 'Inter', sans-serif;
+      font-family: 'Space Grotesk', sans-serif;
       background: var(--bg);
       color: var(--text);
+    }
+
+    /* Dot-grid cyber background texture */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: radial-gradient(circle, rgba(0, 212, 255, 0.07) 1px, transparent 1px);
+      background-size: 28px 28px;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    #chat,
+    #input-bar,
+    .modal-overlay {
+      position: relative;
+      z-index: 1;
+    }
+
+    header {
+      position: relative;
+      z-index: 10;
     }
 
     body {
@@ -52,7 +78,8 @@
       justify-content: space-between;
       padding: 12px 20px;
       background: var(--surface);
-      border-bottom: 1px solid var(--border);
+      border-bottom: 1px solid rgba(0, 212, 255, 0.25);
+      box-shadow: 0 1px 20px rgba(0, 212, 255, 0.08);
     }
 
     .header-left {
@@ -65,12 +92,16 @@
       width: 28px;
       height: 28px;
       fill: var(--accent);
+      filter: drop-shadow(0 0 6px rgba(0, 212, 255, 0.6));
     }
 
     header h1 {
       font-size: 1.15rem;
-      font-weight: 600;
-      letter-spacing: .3px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--accent);
+      text-shadow: 0 0 12px rgba(0, 212, 255, 0.4);
     }
 
     .header-links {
@@ -559,12 +590,14 @@
     }
 
     .msg.user .avatar {
-      background: var(--accent);
+      background: var(--accent2);
+      box-shadow: 0 0 10px rgba(0, 102, 255, 0.5);
       order: 2;
     }
 
     .msg.bot .avatar {
       background: var(--surface2);
+      border: 1px solid rgba(0, 212, 255, 0.2);
     }
 
     .bubble {
@@ -578,12 +611,15 @@
 
     .msg.user .bubble {
       background: var(--user-bubble);
+      border: 1px solid rgba(0, 102, 255, 0.25);
       border-bottom-right-radius: 4px;
     }
 
     .msg.bot .bubble {
       background: var(--bot-bubble);
-      border: 1px solid var(--border);
+      border: 1px solid rgba(0, 212, 255, 0.12);
+      border-left: 2px solid var(--accent);
+      box-shadow: -2px 0 12px rgba(0, 212, 255, 0.12), inset 0 0 20px rgba(0, 212, 255, 0.02);
       border-bottom-left-radius: 4px;
     }
 
@@ -624,16 +660,17 @@
     }
 
     .msg.bot .bubble code {
-      background: rgba(255, 255, 255, 0.08);
+      background: rgba(0, 212, 255, 0.08);
       padding: 2px 6px;
       border-radius: 4px;
       font-size: .87rem;
-      font-family: 'Courier New', monospace;
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--accent);
     }
 
     .msg.bot .bubble pre {
-      background: #0d1117;
-      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: #000;
+      border: 1px solid rgba(0, 212, 255, 0.15);
       border-radius: 8px;
       padding: 12px 16px;
       margin: .6em 0;
@@ -645,6 +682,7 @@
       padding: 0;
       font-size: .85rem;
       line-height: 1.5;
+      color: #00d4ff;
     }
 
     .msg.bot .bubble blockquote {
@@ -662,13 +700,13 @@
 
     .msg.bot .bubble th,
     .msg.bot .bubble td {
-      border: 1px solid rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(0, 212, 255, 0.12);
       padding: 6px 10px;
       text-align: left;
     }
 
     .msg.bot .bubble th {
-      background: rgba(255, 255, 255, 0.05);
+      background: rgba(0, 212, 255, 0.05);
     }
 
     .msg.bot .bubble a {
@@ -682,7 +720,7 @@
 
     .msg.bot .bubble hr {
       border: none;
-      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      border-top: 1px solid rgba(0, 212, 255, 0.15);
       margin: .8em 0;
     }
 
@@ -732,8 +770,8 @@
     #prompt {
       flex: 1;
       resize: none;
-      border: 1px solid var(--border);
-      background: var(--bg);
+      border: 1px solid rgba(0, 212, 255, 0.2);
+      background: rgba(9, 13, 26, 0.9);
       color: var(--text);
       border-radius: var(--radius);
       padding: 12px 16px;
@@ -742,12 +780,12 @@
       line-height: 1.5;
       max-height: 160px;
       outline: none;
-      transition: border-color .2s;
+      transition: border-color .2s, box-shadow .2s;
     }
 
     #prompt:focus {
       border-color: var(--accent);
-      box-shadow: 0 0 0 3px var(--accent-glow);
+      box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.18), 0 0 16px rgba(0, 212, 255, 0.1);
     }
 
     #prompt::placeholder {
@@ -759,7 +797,7 @@
       height: 44px;
       border: none;
       border-radius: 50%;
-      background: var(--accent);
+      background: var(--accent2);
       color: #fff;
       cursor: pointer;
       display: flex;
@@ -767,16 +805,34 @@
       justify-content: center;
       transition: transform .15s, opacity .2s;
       flex-shrink: 0;
+      box-shadow: 0 0 0 0 rgba(0, 212, 255, 0.5);
+      animation: sendPulse 2.4s ease-in-out infinite;
+    }
+
+    @keyframes sendPulse {
+      0% {
+        box-shadow: 0 0 0 0 rgba(0, 212, 255, 0.45);
+      }
+
+      60% {
+        box-shadow: 0 0 0 8px rgba(0, 212, 255, 0);
+      }
+
+      100% {
+        box-shadow: 0 0 0 0 rgba(0, 212, 255, 0);
+      }
     }
 
     #send:hover {
       transform: scale(1.08);
+      background: #0055dd;
     }
 
     #send:disabled {
       opacity: .4;
       cursor: not-allowed;
       transform: none;
+      animation: none;
     }
 
     #send svg {
@@ -957,12 +1013,12 @@
     .api-intro .api-base-url {
       display: inline-block;
       margin-top: 10px;
-      background: rgba(233, 69, 96, 0.12);
-      border: 1px solid rgba(233, 69, 96, 0.25);
+      background: rgba(0, 212, 255, 0.08);
+      border: 1px solid rgba(0, 212, 255, 0.25);
       border-radius: 8px;
       padding: 8px 14px;
       font-size: .82rem;
-      font-family: 'Courier New', monospace;
+      font-family: 'JetBrains Mono', monospace;
       color: var(--accent);
     }
 
@@ -985,7 +1041,7 @@
     }
 
     .api-section-title .section-num {
-      background: var(--accent);
+      background: var(--accent2);
       color: #fff;
       width: 24px;
       height: 24px;
@@ -995,6 +1051,7 @@
       justify-content: center;
       font-size: .72rem;
       flex-shrink: 0;
+      box-shadow: 0 0 8px rgba(0, 102, 255, 0.4);
     }
 
     .api-card {
@@ -1007,7 +1064,7 @@
     }
 
     .api-card:hover {
-      border-color: rgba(233, 69, 96, 0.3);
+      border-color: rgba(0, 212, 255, 0.25);
     }
 
     .api-card-header {
@@ -1023,7 +1080,7 @@
       border-radius: 6px;
       font-size: .7rem;
       font-weight: 700;
-      font-family: 'Courier New', monospace;
+      font-family: 'JetBrains Mono', monospace;
       letter-spacing: .5px;
       flex-shrink: 0;
       margin-top: 1px;
@@ -1059,9 +1116,9 @@
     }
 
     .api-card-endpoint {
-      font-family: 'Courier New', monospace;
+      font-family: 'JetBrains Mono', monospace;
       font-size: .88rem;
-      color: var(--text);
+      color: var(--accent);
       font-weight: 600;
       margin-bottom: 4px;
     }
@@ -1075,7 +1132,7 @@
     .api-code-block {
       position: relative;
       padding: 16px 20px;
-      background: #0d1117;
+      background: #000;
     }
 
     .api-code-block pre {
@@ -1086,10 +1143,10 @@
     }
 
     .api-code-block code {
-      font-family: 'Courier New', monospace;
+      font-family: 'JetBrains Mono', monospace;
       font-size: .82rem;
       line-height: 1.65;
-      color: #c9d1d9;
+      color: #00d4ff;
       white-space: pre;
     }
 
@@ -1097,11 +1154,11 @@
       position: absolute;
       top: 10px;
       right: 12px;
-      background: rgba(255, 255, 255, 0.07);
-      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: rgba(0, 212, 255, 0.06);
+      border: 1px solid rgba(0, 212, 255, 0.2);
       border-radius: 6px;
       color: var(--text-muted);
-      font-family: inherit;
+      font-family: 'JetBrains Mono', monospace;
       font-size: .72rem;
       font-weight: 500;
       padding: 4px 10px;
@@ -1110,9 +1167,9 @@
     }
 
     .api-copy-btn:hover {
-      background: var(--accent-glow);
+      background: rgba(0, 212, 255, 0.12);
       border-color: var(--accent);
-      color: var(--text);
+      color: var(--accent);
     }
 
     .api-copy-btn.copied {
