@@ -8,7 +8,11 @@
 Ollama-in-a-Box gives anyone a dead-simple way to spin up a local Large Language Model on a VM and chat with it through a web interface. No API keys, no subscriptions, no data leaving your machine. Just you and an your super-special LLM!
 
 ---
+### Resource Links
 
+Below is the link to the full curriculum and structured activities for this session.
+
+* [Click Here for the Lesson Plan](https://www.notion.so/Introducing-LLMs-at-the-6-12-Grade-Levels-MiniJarvis-3174c8e523768022b7daf704a7d2f9d1?source=copy_link)
 ### Heads Up !
 
 **System Requirements:**
