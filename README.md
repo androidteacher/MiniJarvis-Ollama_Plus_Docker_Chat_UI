@@ -1,5 +1,4 @@
-# MiniJarvis: Local LLM One-Click Deploy
-
+# MiniJarvis: Dockerized Local LLM Chat App
 <p align="center">
   <img src="image/Front-Page.png" alt="MiniJarvis Web UI Screenshot" width="800" />
 </p>
