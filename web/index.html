@@ -788,7 +788,9 @@
     /* ---- API Info overlay ---- */
     #api-overlay,
     #codeflow-overlay,
-    #llmcomp-overlay {
+    #llmcomp-overlay,
+    #twp-overlay,
+    #cwq-overlay {
       display: none;
       position: fixed;
       inset: 0;
@@ -800,7 +802,9 @@
 
     #api-overlay.open,
     #codeflow-overlay.open,
-    #llmcomp-overlay.open {
+    #llmcomp-overlay.open,
+    #twp-overlay.open,
+    #cwq-overlay.open {
       display: flex;
     }
 
@@ -859,6 +863,8 @@
 
     #api-body,
     #codeflow-body,
+    #twp-body,
+    #cwq-body,
     #llmcomp-body {
       flex: 1;
       overflow-y: auto;
@@ -1153,11 +1159,338 @@
                 style="fill:#60a5fa;vertical-align:middle;margin-bottom:2px">
                 <path d="M7 2v11h3v9l7-12h-4l4-8z" />
               </svg></span> Small LLMs Compared</a>
+          <a href="#" id="twp-btn"><span class="menu-icon"><svg viewBox="0 0 24 24" width="14" height="14"
+                style="fill:#a78bfa;vertical-align:middle;margin-bottom:2px">
+                <path
+                  d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z" />
+              </svg></span> Tokens, Weights &amp; Params</a>
+          <a href="#" id="cwq-btn"><span class="menu-icon"><svg viewBox="0 0 24 24" width="14" height="14"
+                style="fill:#34d399;vertical-align:middle;margin-bottom:2px">
+                <path
+                  d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 14l-5-5 1.41-1.41L12 14.17l7.59-7.59L21 8l-9 9z" />
+              </svg></span> Context Window &amp; Quantization</a>
         </div>
       </div>
       <a href="https://cyberlessons101.com" target="_blank">CyberLessons101</a>
     </div>
   </header>
+
+  <!-- Context Window & Quantization Overlay -->
+  <div id="cwq-overlay">
+    <div class="api-header">
+      <div class="api-header-left">
+        <svg class="api-header-icon" viewBox="0 0 24 24" style="fill:#34d399">
+          <path
+            d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 14l-5-5 1.41-1.41L12 14.17l7.59-7.59L21 8l-9 9z" />
+        </svg>
+        <div>
+          <h2>Context Window &amp; Quantization</h2>
+          <div class="api-subtitle">Memory limits, file compression, and the hardware you need to run local LLMs</div>
+        </div>
+      </div>
+      <button class="api-close-btn" id="cwq-close-btn">✕ Close</button>
+    </div>
+    <div id="cwq-body">
+      <div class="api-content">
+
+        <!-- Intro -->
+        <div class="api-intro">
+          <h1>Context Window &amp; Quantization</h1>
+          <p>Two concepts that determine how much a model can <em>remember</em> and how much <em>space</em> it takes up
+            on your machine. Understanding these will help you pick the right model for your hardware.</p>
+          <div class="api-base-url">💾 These concepts directly affect which models run on your hardware</div>
+        </div>
+
+        <!-- Section 6: Context Window -->
+        <div class="api-section">
+          <div class="api-section-title"><span class="section-num">6</span> Context Window — The Model’s Short-Term
+            Memory</div>
+          <div class="api-card">
+            <div class="api-card-header" style="border-bottom:none">
+              <div class="api-card-meta">
+                <div class="api-card-desc" style="font-size:.88rem">
+                  <p style="margin-bottom:10px">The <strong>Context Window</strong> is the maximum amount of information
+                    (in tokens) the model can “keep in its head” at any single moment.</p>
+                  <p style="margin-bottom:12px">Think of it like a <strong>rolling whiteboard</strong>. As you type a
+                    prompt and the model generates a response, that text fills up the board. Once the board is full, the
+                    model has to <em>erase the oldest information</em> at the top to make room for new words at the
+                    bottom.</p>
+                  <ul style="padding-left:1.2em;line-height:2.1">
+                    <li>📄 <strong>Why it matters:</strong> If you ask a model to summarize a 50-page PDF but the model
+                      only has an 8,000-token context window (~15–20 pages), it will “forget” the beginning of the
+                      document by the time it reaches the end.</li>
+                  </ul>
+                  <p style="margin-top:14px;margin-bottom:8px"><strong>⚖️ The “Goldilocks” Problem:</strong></p>
+                  <ul style="padding-left:1.2em;line-height:2.1">
+                    <li>🟥 <strong>Too Small:</strong> The model loses track of the conversation or forgets instructions
+                      you gave it ten minutes ago.</li>
+                    <li>🟦 <strong>Too Large:</strong> The model requires significantly more RAM/VRAM to stay
+                      “attentive,” which can slow down response time considerably.</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 7: Quantization -->
+        <div class="api-section">
+          <div class="api-section-title"><span class="section-num">7</span> Quantization — Shrinking the Giant</div>
+          <div class="api-card">
+            <div class="api-card-header" style="border-bottom:none">
+              <div class="api-card-meta">
+                <div class="api-card-desc" style="font-size:.88rem">
+                  <p style="margin-bottom:10px">By default, the numbers (weights) in a raw AI model are stored as
+                    high-precision decimals (usually <strong>16-bit or 32-bit</strong>). This makes files massive — a
+                    raw 7B parameter model takes up <strong>14–28 GB</strong>.</p>
+                  <p style="margin-bottom:12px"><strong>Quantization</strong> is the process of “rounding” those numbers
+                    down to a lower precision (like <strong>4-bit or 8-bit</strong>) to save space.</p>
+                  <ul style="padding-left:1.2em;line-height:2.1">
+                    <li>🎥 <strong>The Compression Trade-off:</strong> It’s like converting a 4K movie to 1080p. You
+                      lose a tiny bit of “crispness” (intelligence), but the file size drops by <strong>~70%</strong>,
+                      allowing it to fit on a standard laptop.</li>
+                    <li>🧪 <strong>Ollama’s Sweet Spot — Q4_K_M:</strong> Ollama primarily uses <strong>4-bit
+                        quantization</strong> (labeled <code>Q4_K_M</code>):
+                      <ul style="margin-top:6px;line-height:2">
+                        <li>An 8B model shrinks from <strong>16 GB → ~4.8 GB</strong>.</li>
+                        <li>The loss in accuracy is usually <strong>less than 1%</strong> — imperceptible for most daily
+                          tasks.</li>
+                        <li>Allows the model to run entirely in your computer’s <strong>RAM or GPU VRAM</strong>.</li>
+                      </ul>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 8: Hardware Matrix -->
+        <div class="api-section">
+          <div class="api-section-title"><span class="section-num">8</span> Hardware Requirements Matrix (2026)</div>
+          <p style="font-size:.82rem;color:var(--text-muted);margin-bottom:14px">Assumes default <strong>4-bit
+              quantization (Q4_K_M)</strong> — what Ollama uses for standard library pulls.</p>
+          <div class="api-card" style="overflow-x:auto">
+            <table class="llm-table">
+              <thead>
+                <tr>
+                  <th>Model Size</th>
+                  <th>Min. VRAM / RAM</th>
+                  <th>Performance</th>
+                  <th>Example Hardware</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><span class="llm-badge"
+                      style="background:rgba(74,222,128,.15);color:#4ade80;border:1px solid rgba(74,222,128,.3)">1B –
+                      3B</span></td>
+                  <td class="param-cell">4 GB</td>
+                  <td><strong>Instant.</strong> Feels like real-time typing.</td>
+                  <td class="weak-cell">Laptops w/ integrated graphics, GTX 1060, modern tablets.</td>
+                </tr>
+                <tr>
+                  <td><span class="llm-badge"
+                      style="background:rgba(96,165,250,.15);color:#60a5fa;border:1px solid rgba(96,165,250,.3)">7B –
+                      9B</span></td>
+                  <td class="param-cell">8 GB</td>
+                  <td><strong>Smooth.</strong> Fast enough for fluid conversation and coding.</td>
+                  <td class="weak-cell">RTX 3060/4060, Apple M1/M2/M3 (8GB+), high-end workstation CPUs.</td>
+                </tr>
+                <tr>
+                  <td><span class="llm-badge"
+                      style="background:rgba(251,191,36,.15);color:#fbbf24;border:1px solid rgba(251,191,36,.3)">12B –
+                      14B</span></td>
+                  <td class="param-cell">12 – 16 GB</td>
+                  <td><strong>Steady.</strong> Great reasoning; starts to feel heavy on older chips.</td>
+                  <td class="weak-cell">RTX 4070 Ti, RTX 5070, MacBooks with 16GB+ Unified Memory.</td>
+                </tr>
+                <tr>
+                  <td><span class="llm-badge"
+                      style="background:rgba(251,146,60,.15);color:#fb923c;border:1px solid rgba(251,146,60,.3)">30B –
+                      35B</span></td>
+                  <td class="param-cell">24 – 32 GB</td>
+                  <td><strong>Deliberate.</strong> High-quality logic; requires beefy hardware.</td>
+                  <td class="weak-cell">RTX 3090 / 4090 / 5090, Mac Studio.</td>
+                </tr>
+                <tr>
+                  <td><span class="llm-badge"
+                      style="background:rgba(248,113,113,.15);color:#f87171;border:1px solid rgba(248,113,113,.3)">70B+</span>
+                  </td>
+                  <td class="param-cell">48 GB+</td>
+                  <td><strong>Slow &amp; Powerful.</strong> The gold standard for local intelligence.</td>
+                  <td class="weak-cell">Dual-GPU setups (2× RTX 3090/4090) or Mac Studio/Pro with 64GB+ RAM.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div><!-- /.api-content -->
+    </div><!-- /#cwq-body -->
+  </div><!-- /#cwq-overlay -->
+
+  <!-- Tokens, Weights & Parameters Overlay -->
+  <div id="twp-overlay">
+    <div class="api-header">
+      <div class="api-header-left">
+        <svg class="api-header-icon" viewBox="0 0 24 24" style="fill:#a78bfa">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z" />
+        </svg>
+        <div>
+          <h2>Tokens, Weights &amp; Parameters</h2>
+          <div class="api-subtitle">LLM Fundamentals: Under the Hood — what a model actually is and how it thinks</div>
+        </div>
+      </div>
+      <button class="api-close-btn" id="twp-close-btn">✕ Close</button>
+    </div>
+    <div id="twp-body">
+      <div class="api-content">
+
+        <!-- Intro -->
+        <div class="api-intro">
+          <h1>LLM Fundamentals: Under the Hood</h1>
+          <p>Before running models with Ollama, it helps to understand what a "model" actually <em>is</em>. At its
+            simplest, an LLM is a complex piece of software trained to predict the next piece of text in a sequence —
+            over and over, billions of times.</p>
+          <div class="api-base-url">💡 These concepts apply to every model in the Ollama library</div>
+        </div>
+
+        <!-- Section 1: Tokens -->
+        <div class="api-section">
+          <div class="api-section-title"><span class="section-num">1</span> Tokens — The Currency of Language</div>
+          <div class="api-card">
+            <div class="api-card-header" style="border-bottom:none">
+              <div class="api-card-meta">
+                <div class="api-card-desc" style="font-size:.88rem">
+                  <p style="margin-bottom:10px">Computers don't read words; they read numbers. <strong>Tokens</strong>
+                    are the chunks of text that a model processes as its basic unit of input and output.</p>
+                  <ul style="padding-left:1.2em;line-height:2.1">
+                    <li>A token isn't always a whole word. It can be a syllable, a single letter, or even a punctuation
+                      character.</li>
+                    <li>📏 <strong>Rule of Thumb:</strong> In English, <strong>1,000 tokens ≈ 750 words</strong>.</li>
+                    <li>🔍 <strong>Example:</strong> The word "Ollama" might be split into two tokens: <code>Oll</code>
+                      and <code>ama</code>.</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 2: Parameters -->
+        <div class="api-section">
+          <div class="api-section-title"><span class="section-num">2</span> Parameters — What the "B" Means</div>
+          <div class="api-card">
+            <div class="api-card-header" style="border-bottom:none">
+              <div class="api-card-meta">
+                <div class="api-card-desc" style="font-size:.88rem">
+                  <p style="margin-bottom:10px">When you see a model labeled <strong>Llama-3 8B</strong> or
+                    <strong>Phi-3 3B</strong>, the <strong>"B"</strong> stands for <strong>Billions of
+                      Parameters</strong>.
+                  </p>
+                  <ul style="padding-left:1.2em;line-height:2.1">
+                    <li><strong>Definition:</strong> Parameters are internal variables that the model adjusts during
+                      training to improve its predictions.</li>
+                    <li>Think of parameters like the connections between neurons in a brain — the more there are, the
+                      more complex patterns the model can recognize and reproduce.</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 3: Weights -->
+        <div class="api-section">
+          <div class="api-section-title"><span class="section-num">3</span> Weights — The Strength of Connections</div>
+          <div class="api-card">
+            <div class="api-card-header" style="border-bottom:none">
+              <div class="api-card-meta">
+                <div class="api-card-desc" style="font-size:.88rem">
+                  <p style="margin-bottom:10px">Each parameter has a <strong>Weight</strong>: a numerical value that
+                    determines how much influence one piece of data has on the next prediction.</p>
+                  <ul style="padding-left:1.2em;line-height:2.1">
+                    <li>During training, if the model correctly predicts a word it <em>strengthens</em> those weights.
+                      If it's wrong, it <em>adjusts</em> them. This process repeats trillions of times.</li>
+                    <li>📦 <strong>When you <code>ollama pull</code> a model</strong>, you are downloading a massive
+                      file of these saved, pre-trained weights. That's the entire "brain" of the model.</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 4: Size Trade-offs table -->
+        <div class="api-section">
+          <div class="api-section-title"><span class="section-num">4</span> What Does "3B Parameters" Actually Mean?
+          </div>
+          <div class="api-card" style="overflow-x:auto">
+            <table class="llm-table">
+              <thead>
+                <tr>
+                  <th>Size</th>
+                  <th>Intelligence &amp; Knowledge</th>
+                  <th>Speed &amp; Hardware</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><span class="llm-badge"
+                      style="background:rgba(74,222,128,.15);color:#4ade80;border:1px solid rgba(74,222,128,.3)">3B
+                      Small</span></td>
+                  <td>Great for simple tasks, summarizing, and basic chat. May “hallucinate” more often.</td>
+                  <td class="param-cell">Very fast. Runs on a standard laptop or high-end phone.</td>
+                </tr>
+                <tr>
+                  <td><span class="llm-badge"
+                      style="background:rgba(251,191,36,.15);color:#fbbf24;border:1px solid rgba(251,191,36,.3)">8B
+                      Medium</span></td>
+                  <td>The “sweet spot” for most users. Good reasoning and follows instructions well.</td>
+                  <td class="param-cell">Needs a decent GPU (8 GB+ VRAM) to run smoothly.</td>
+                </tr>
+                <tr>
+                  <td><span class="llm-badge"
+                      style="background:rgba(248,113,113,.15);color:#f87171;border:1px solid rgba(248,113,113,.3)">70B
+                      Large</span></td>
+                  <td>High-level reasoning, coding, and deep knowledge.</td>
+                  <td class="param-cell">Very slow without professional-grade hardware (dual GPUs).</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Section 5: Inference -->
+        <div class="api-section">
+          <div class="api-section-title"><span class="section-num">5</span> Inference — The Act of Thinking</div>
+          <div class="api-card">
+            <div class="api-card-header" style="border-bottom:none">
+              <div class="api-card-meta">
+                <div class="api-card-desc" style="font-size:.88rem">
+                  <p style="margin-bottom:10px">When you type a prompt into Ollama and it generates a response, that
+                    process is called <strong>Inference</strong>.</p>
+                  <p>The model is doing this in real time:</p>
+                  <ul style="padding-left:1.2em;line-height:2.1;margin-top:8px">
+                    <li>Takes your input and <strong>tokenizes</strong> it into numbers.</li>
+                    <li>Passes those numbers through its <strong>billions of weighted parameters</strong>.</li>
+                    <li>Calculates the <strong>most statistically likely next token</strong>.</li>
+                    <li>Repeats that calculation <strong>one token at a time</strong> until the response is complete.
+                    </li>
+                  </ul>
+                  <p style="margin-top:12px">Every word you see appear is the result of that entire calculation
+                    happening in milliseconds. The larger the model, the more calculations per token — which is why
+                    bigger models are slower.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /.api-content -->
+    </div><!-- /#twp-body -->
+  </div><!-- /#twp-overlay -->
 
   <!-- Small LLMs Compared Overlay -->
   <div id="llmcomp-overlay">
@@ -2230,9 +2563,43 @@ if (role === 'bot') {
     llmcompBtn.addEventListener('click', openLlmcompOverlay);
     llmcompCloseBtn.addEventListener('click', closeLlmcompOverlay);
 
+    /* ---- Tokens, Weights & Parameters overlay ---- */
+    const twpOverlay = document.getElementById('twp-overlay');
+    const twpBtn = document.getElementById('twp-btn');
+    const twpCloseBtn = document.getElementById('twp-close-btn');
+
+    function openTwpOverlay(e) {
+      e.preventDefault();
+      infoDropdownMenu.classList.remove('open');
+      infoDropdownBtn.classList.remove('open');
+      twpOverlay.classList.add('open');
+      document.getElementById('twp-body').scrollTop = 0;
+    }
+    function closeTwpOverlay() { twpOverlay.classList.remove('open'); }
+
+    twpBtn.addEventListener('click', openTwpOverlay);
+    twpCloseBtn.addEventListener('click', closeTwpOverlay);
+
+    /* ---- Context Window & Quantization overlay ---- */
+    const cwqOverlay = document.getElementById('cwq-overlay');
+    const cwqBtn = document.getElementById('cwq-btn');
+    const cwqCloseBtn = document.getElementById('cwq-close-btn');
+
+    function openCwqOverlay(e) {
+      e.preventDefault();
+      infoDropdownMenu.classList.remove('open');
+      infoDropdownBtn.classList.remove('open');
+      cwqOverlay.classList.add('open');
+      document.getElementById('cwq-body').scrollTop = 0;
+    }
+    function closeCwqOverlay() { cwqOverlay.classList.remove('open'); }
+
+    cwqBtn.addEventListener('click', openCwqOverlay);
+    cwqCloseBtn.addEventListener('click', closeCwqOverlay);
+
     /* Close any overlay with Escape key */
     document.addEventListener('keydown', e => {
-      if (e.key === 'Escape') { closeApiOverlay(); closeCodeflowOverlay(); closeLlmcompOverlay(); }
+      if (e.key === 'Escape') { closeApiOverlay(); closeCodeflowOverlay(); closeLlmcompOverlay(); closeTwpOverlay(); closeCwqOverlay(); }
     });
 
     /* Copy button logic (covers both overlays) */
