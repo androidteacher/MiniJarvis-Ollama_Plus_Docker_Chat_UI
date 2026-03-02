@@ -1,4 +1,4 @@
-# MiniJarvis: Local LLM Access for the Classroom
+# MiniJarvis: Local LLM One-Click Deploy
 
 <p align="center">
   <img src="image/Front-Page.png" alt="MiniJarvis Web UI Screenshot" width="800" />
@@ -10,7 +10,7 @@ Ollama-in-a-Box gives anyone a dead-simple way to spin up a local Large Language
 
 ---
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Prerequisites
 
