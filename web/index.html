@@ -270,6 +270,156 @@
       margin-top: 3px;
     }
 
+    /* ---- Roll Your Own footer ---- */
+    .model-panel-footer {
+      padding: 10px 16px;
+      border-top: 1px solid var(--border);
+    }
+
+    .ryo-btn {
+      width: 100%;
+      background: transparent;
+      border: 1px dashed rgba(255, 255, 255, 0.15);
+      border-radius: 8px;
+      color: var(--text-muted);
+      font-family: inherit;
+      font-size: .8rem;
+      padding: 8px;
+      cursor: pointer;
+      transition: border-color .2s, color .2s;
+    }
+
+    .ryo-btn:hover {
+      border-color: var(--accent);
+      color: var(--text);
+    }
+
+    /* ---- Custom model modal ---- */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, .65);
+      z-index: 200;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-overlay.open {
+      display: flex;
+    }
+
+    .modal {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px;
+      width: 420px;
+      max-width: 95vw;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, .6);
+    }
+
+    .modal h2 {
+      font-size: 1.05rem;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .modal-warning {
+      background: rgba(233, 69, 96, 0.12);
+      border: 1px solid rgba(233, 69, 96, 0.3);
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-size: .8rem;
+      color: #f87171;
+      margin-bottom: 14px;
+      line-height: 1.5;
+    }
+
+    .modal-link {
+      font-size: .8rem;
+      margin-bottom: 12px;
+    }
+
+    .modal-link a {
+      color: var(--accent);
+    }
+
+    .modal input[type=text] {
+      width: 100%;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text);
+      font-family: inherit;
+      font-size: .9rem;
+      padding: 10px 14px;
+      outline: none;
+      margin-bottom: 12px;
+      transition: border-color .2s;
+    }
+
+    .modal input[type=text]:focus {
+      border-color: var(--accent);
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 8px;
+      justify-content: flex-end;
+    }
+
+    .modal-actions button {
+      padding: 8px 18px;
+      border-radius: 8px;
+      border: none;
+      font-family: inherit;
+      font-size: .85rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .modal-cancel {
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--text);
+    }
+
+    .modal-install {
+      background: var(--accent);
+      color: #fff;
+    }
+
+    .modal-install:disabled {
+      opacity: .4;
+      cursor: not-allowed;
+    }
+
+    #ryo-progress {
+      margin-top: 12px;
+      display: none;
+    }
+
+    #ryo-progress .model-progress-bar {
+      height: 6px;
+      background: rgba(255, 255, 255, .08);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    #ryo-progress .model-progress-fill {
+      height: 100%;
+      background: var(--accent);
+      border-radius: 3px;
+      width: 0%;
+      transition: width .3s;
+    }
+
+    #ryo-progress .model-progress-text {
+      font-size: .75rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
     /* ---- Chat area ---- */
     #chat {
       flex: 1;
@@ -572,12 +722,39 @@
         <div class="model-panel" id="model-panel">
           <div class="model-panel-header">Model Manager</div>
           <div class="model-list" id="model-list"></div>
+          <div class="model-panel-footer">
+            <button class="ryo-btn" id="ryo-btn">✨ Roll Your Own…</button>
+          </div>
         </div>
       </div>
       <a href="https://github.com/androidteacher/ollama-chat-docker-deploy-llama3.2-1b" target="_blank">GitHub</a>
       <a href="https://cyberlessons101.com" target="_blank">CyberLessons101</a>
     </div>
   </header>
+
+  <!-- Roll Your Own Modal -->
+  <div class="modal-overlay" id="ryo-modal">
+    <div class="modal">
+      <h2>✨ Roll Your Own Model</h2>
+      <div class="modal-warning">
+        ⚠️ <strong>VM Warning:</strong> Models with many parameters (7B+) require significant RAM and will run very
+        slowly or not at all on a typical virtual machine. Stick to models under 4B parameters for best results.
+      </div>
+      <div class="modal-link">Browse available models at: <a href="https://ollama.com/library"
+          target="_blank">ollama.com/library</a></div>
+      <input type="text" id="ryo-input" placeholder="e.g. gemma2:9b" />
+      <div id="ryo-progress">
+        <div class="model-progress-bar">
+          <div class="model-progress-fill" id="ryo-fill"></div>
+        </div>
+        <div class="model-progress-text" id="ryo-status">Starting…</div>
+      </div>
+      <div class="modal-actions">
+        <button class="modal-cancel" id="ryo-cancel">Cancel</button>
+        <button class="modal-install" id="ryo-install">Download &amp; Install</button>
+      </div>
+    </div>
+  </div>
 
   <div id="chat">
     <div class="msg bot">
@@ -620,6 +797,8 @@
     ];
 
     let installedModels = new Set();
+    /* Custom models installed via Roll Your Own, persisted in localStorage */
+    let customModels = JSON.parse(localStorage.getItem('ryoModels') || '[]');
 
     /* Toggle dropdown */
     modelToggle.addEventListener('click', (e) => {
@@ -708,6 +887,42 @@
         item.appendChild(progress);
         modelListEl.appendChild(item);
       });
+
+      /* Also render any custom (Roll Your Own) models that are installed */
+      customModels.forEach(name => {
+        if (KNOWN_MODELS.some(m => m.name === name)) return; /* skip dupes */
+        if (!installedModels.has(name)) {
+          customModels = customModels.filter(n => n !== name);
+          localStorage.setItem('ryoModels', JSON.stringify(customModels));
+          return;
+        }
+        const isActive = name === activeModel;
+        const item = document.createElement('div');
+        item.className = 'model-item' + (isActive ? ' active' : '');
+
+        const dot = document.createElement('div');
+        dot.className = 'model-dot installed';
+
+        const info = document.createElement('div');
+        info.className = 'model-info';
+        info.innerHTML = `<div class="model-name">${name}</div><div class="model-desc">Custom model</div>`;
+        info.addEventListener('click', () => { setActiveModel(name); modelPanel.classList.remove('open'); });
+
+        const actionBtn = document.createElement('button');
+        actionBtn.className = 'model-action remove';
+        actionBtn.textContent = 'Remove';
+        const progress = document.createElement('div');
+        progress.className = 'model-progress';
+        progress.style.display = 'none';
+        actionBtn.addEventListener('click', async (e) => {
+          e.stopPropagation();
+          await removeModel(name, actionBtn, progress);
+          customModels = customModels.filter(n => n !== name);
+          localStorage.setItem('ryoModels', JSON.stringify(customModels));
+        });
+        item.append(dot, info, actionBtn, progress);
+        modelListEl.appendChild(item);
+      });
     }
 
     /* Install model with streaming progress */
@@ -779,6 +994,90 @@
 
     /* Initialize */
     refreshModels();
+
+    /* ---- Roll Your Own modal ---- */
+    const ryoModal = document.getElementById('ryo-modal');
+    const ryoBtn = document.getElementById('ryo-btn');
+    const ryoCancel = document.getElementById('ryo-cancel');
+    const ryoInput = document.getElementById('ryo-input');
+    const ryoInstall = document.getElementById('ryo-install');
+    const ryoProgress = document.getElementById('ryo-progress');
+    const ryoFill = document.getElementById('ryo-fill');
+    const ryoStatus = document.getElementById('ryo-status');
+
+    function openRyo() {
+      ryoModal.classList.add('open');
+      modelPanel.classList.remove('open');
+      ryoInput.value = '';
+      ryoProgress.style.display = 'none';
+      ryoFill.style.width = '0%';
+      ryoStatus.textContent = 'Starting…';
+      ryoInstall.disabled = false;
+      ryoInstall.textContent = 'Download & Install';
+      setTimeout(() => ryoInput.focus(), 50);
+    }
+    function closeRyo() { ryoModal.classList.remove('open'); }
+
+    ryoBtn.addEventListener('click', openRyo);
+    ryoCancel.addEventListener('click', closeRyo);
+    ryoModal.addEventListener('click', e => { if (e.target === ryoModal) closeRyo(); });
+
+    ryoInstall.addEventListener('click', async () => {
+      const name = ryoInput.value.trim();
+      if (!name) { ryoInput.focus(); return; }
+
+      ryoInstall.disabled = true;
+      ryoInstall.textContent = 'Installing…';
+      ryoProgress.style.display = 'block';
+      ryoFill.style.width = '0%';
+      ryoStatus.textContent = 'Connecting…';
+
+      try {
+        const res = await fetch('/api/pull', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, stream: true })
+        });
+        const reader = res.body.getReader();
+        const decoder = new TextDecoder();
+        let buffer = '';
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+          buffer += decoder.decode(value, { stream: true });
+          const lines = buffer.split('\n');
+          buffer = lines.pop();
+          for (const line of lines) {
+            if (!line.trim()) continue;
+            try {
+              const j = JSON.parse(line);
+              ryoStatus.textContent = j.status || '';
+              if (j.total && j.completed) {
+                const pct = Math.round((j.completed / j.total) * 100);
+                ryoFill.style.width = pct + '%';
+                ryoStatus.textContent = `${j.status} — ${pct}%`;
+              }
+            } catch { }
+          }
+        }
+        ryoFill.style.width = '100%';
+        ryoStatus.textContent = 'Complete!';
+        /* Track custom model */
+        if (!customModels.includes(name)) {
+          customModels.push(name);
+          localStorage.setItem('ryoModels', JSON.stringify(customModels));
+        }
+        await refreshModels();
+        setTimeout(closeRyo, 1200);
+      } catch (err) {
+        ryoStatus.textContent = '⚠️ Error: ' + err.message;
+        ryoInstall.disabled = false;
+        ryoInstall.textContent = 'Retry';
+      }
+    });
+
+    /* Enter key submits in modal */
+    ryoInput.addEventListener('keydown', e => { if (e.key === 'Enter') ryoInstall.click(); });
 
     /* Auto-grow textarea */
     input.addEventListener('input', () => {
