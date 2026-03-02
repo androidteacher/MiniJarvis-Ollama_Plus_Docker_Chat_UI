@@ -699,6 +699,274 @@
       height: 20px;
       fill: currentColor;
     }
+
+    /* ---- API Info overlay ---- */
+    #api-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: var(--bg);
+      z-index: 300;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    #api-overlay.open {
+      display: flex;
+    }
+
+    .api-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 24px;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+
+    .api-header-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .api-header-icon {
+      width: 30px;
+      height: 30px;
+      fill: var(--accent);
+    }
+
+    .api-header h2 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      letter-spacing: .3px;
+    }
+
+    .api-header .api-subtitle {
+      font-size: .78rem;
+      color: var(--text-muted);
+      margin-top: 1px;
+    }
+
+    .api-close-btn {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      border-radius: 8px;
+      padding: 7px 16px;
+      font-family: inherit;
+      font-size: .85rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: color .2s, border-color .2s, background .2s;
+    }
+
+    .api-close-btn:hover {
+      color: var(--text);
+      border-color: var(--accent);
+      background: var(--accent-glow);
+    }
+
+    #api-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 32px 24px;
+      scrollbar-width: thin;
+      scrollbar-color: var(--surface2) transparent;
+    }
+
+    .api-content {
+      max-width: 860px;
+      margin: 0 auto;
+    }
+
+    .api-intro {
+      margin-bottom: 36px;
+    }
+
+    .api-intro h1 {
+      font-size: 1.6rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+      background: linear-gradient(135deg, var(--text) 40%, var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .api-intro p {
+      font-size: .9rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+      max-width: 640px;
+    }
+
+    .api-intro .api-base-url {
+      display: inline-block;
+      margin-top: 10px;
+      background: rgba(233, 69, 96, 0.12);
+      border: 1px solid rgba(233, 69, 96, 0.25);
+      border-radius: 8px;
+      padding: 8px 14px;
+      font-size: .82rem;
+      font-family: 'Courier New', monospace;
+      color: var(--accent);
+    }
+
+    .api-section {
+      margin-bottom: 48px;
+    }
+
+    .api-section-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: .3px;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 18px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .api-section-title .section-num {
+      background: var(--accent);
+      color: #fff;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: .72rem;
+      flex-shrink: 0;
+    }
+
+    .api-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      margin-bottom: 20px;
+      overflow: hidden;
+      transition: border-color .2s;
+    }
+
+    .api-card:hover {
+      border-color: rgba(233, 69, 96, 0.3);
+    }
+
+    .api-card-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .api-method-badge {
+      padding: 3px 10px;
+      border-radius: 6px;
+      font-size: .7rem;
+      font-weight: 700;
+      font-family: 'Courier New', monospace;
+      letter-spacing: .5px;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .badge-post {
+      background: rgba(74, 222, 128, 0.15);
+      color: #4ade80;
+      border: 1px solid rgba(74, 222, 128, 0.3);
+    }
+
+    .badge-get {
+      background: rgba(96, 165, 250, 0.15);
+      color: #60a5fa;
+      border: 1px solid rgba(96, 165, 250, 0.3);
+    }
+
+    .badge-delete {
+      background: rgba(248, 113, 113, 0.15);
+      color: #f87171;
+      border: 1px solid rgba(248, 113, 113, 0.3);
+    }
+
+    .badge-action {
+      background: rgba(251, 191, 36, 0.15);
+      color: #fbbf24;
+      border: 1px solid rgba(251, 191, 36, 0.3);
+    }
+
+    .api-card-meta {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .api-card-endpoint {
+      font-family: 'Courier New', monospace;
+      font-size: .88rem;
+      color: var(--text);
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .api-card-desc {
+      font-size: .83rem;
+      color: var(--text-muted);
+      line-height: 1.55;
+    }
+
+    .api-code-block {
+      position: relative;
+      padding: 16px 20px;
+      background: #0d1117;
+    }
+
+    .api-code-block pre {
+      margin: 0;
+      overflow-x: auto;
+      scrollbar-width: thin;
+      scrollbar-color: var(--surface2) transparent;
+    }
+
+    .api-code-block code {
+      font-family: 'Courier New', monospace;
+      font-size: .82rem;
+      line-height: 1.65;
+      color: #c9d1d9;
+      white-space: pre;
+    }
+
+    .api-copy-btn {
+      position: absolute;
+      top: 10px;
+      right: 12px;
+      background: rgba(255, 255, 255, 0.07);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 6px;
+      color: var(--text-muted);
+      font-family: inherit;
+      font-size: .72rem;
+      font-weight: 500;
+      padding: 4px 10px;
+      cursor: pointer;
+      transition: background .2s, color .2s, border-color .2s;
+    }
+
+    .api-copy-btn:hover {
+      background: var(--accent-glow);
+      border-color: var(--accent);
+      color: var(--text);
+    }
+
+    .api-copy-btn.copied {
+      color: #4ade80;
+      border-color: #4ade80;
+    }
   </style>
 </head>
 
@@ -728,9 +996,275 @@
         </div>
       </div>
       <a href="https://github.com/androidteacher/ollama-chat-docker-deploy-llama3.2-1b" target="_blank">GitHub</a>
+      <a href="#" id="api-info-btn">API Info</a>
       <a href="https://cyberlessons101.com" target="_blank">CyberLessons101</a>
     </div>
   </header>
+
+  <!-- API Info Overlay -->
+  <div id="api-overlay">
+    <div class="api-header">
+      <div class="api-header-left">
+        <svg class="api-header-icon" viewBox="0 0 24 24">
+          <path d="M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0l4.6-4.6-4.6-4.6L16 6l6 6-6 6-1.4-1.4z" />
+        </svg>
+        <div>
+          <h2>Ollama API Quick Reference</h2>
+          <div class="api-subtitle">All endpoints with plain-language descriptions &amp; ready-to-run curl examples
+          </div>
+        </div>
+      </div>
+      <button class="api-close-btn" id="api-close-btn">✕ Close</button>
+    </div>
+    <div id="api-body">
+      <div class="api-content">
+
+        <!-- Intro -->
+        <div class="api-intro">
+          <h1>Ollama API Reference Guide</h1>
+          <p>Every request targets the Ollama server running locally. By default it listens on port
+            <strong>11434</strong>. All POST bodies are JSON. Use the <strong>Copy</strong> button on any block to grab
+            the exact curl command.</p>
+          <div class="api-base-url">Base URL: http://localhost:11434</div>
+        </div>
+
+        <!-- Section 1: Generation & Chat -->
+        <div class="api-section">
+          <div class="api-section-title"><span class="section-num">1</span> Generation &amp; Chat — Talking to the Model
+          </div>
+
+          <!-- /api/generate -->
+          <div class="api-card">
+            <div class="api-card-header">
+              <span class="api-method-badge badge-post">POST</span>
+              <div class="api-card-meta">
+                <div class="api-card-endpoint">/api/generate</div>
+                <div class="api-card-desc">Single-turn text completion. Send a prompt, get a response. This is the
+                  simplest way to ask the model a question — perfect for one-off tasks where you don't need to maintain
+                  a conversation history.</div>
+              </div>
+            </div>
+            <div class="api-code-block">
+              <button class="api-copy-btn">Copy</button>
+              <pre><code>curl http://localhost:11434/api/generate -d '{
+  "model": "llama3.2:1b",
+  "prompt": "Summarize the risks of CVE-2025-55182.",
+  "stream": false
+}'</code></pre>
+            </div>
+          </div>
+
+          <!-- /api/chat -->
+          <div class="api-card">
+            <div class="api-card-header">
+              <span class="api-method-badge badge-post">POST</span>
+              <div class="api-card-meta">
+                <div class="api-card-endpoint">/api/chat</div>
+                <div class="api-card-desc">Multi-turn chat with message history. You send an array of messages (system,
+                  user, assistant) and the model replies in context. This is the right endpoint for building anything
+                  that feels like a real conversation or an interactive agent.</div>
+              </div>
+            </div>
+            <div class="api-code-block">
+              <button class="api-copy-btn">Copy</button>
+              <pre><code>curl http://localhost:11434/api/chat -d '{
+  "model": "qwen2.5:1.5b",
+  "messages": [
+    { "role": "system", "content": "You are a cybersecurity mentor." },
+    { "role": "user",   "content": "Help me with a CTF challenge." }
+  ],
+  "stream": false
+}'</code></pre>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 2: Memory & VRAM Management -->
+        <div class="api-section">
+          <div class="api-section-title"><span class="section-num">2</span> Model Memory &amp; VRAM Management</div>
+
+          <!-- /api/ps -->
+          <div class="api-card">
+            <div class="api-card-header">
+              <span class="api-method-badge badge-get">GET</span>
+              <div class="api-card-meta">
+                <div class="api-card-endpoint">/api/ps</div>
+                <div class="api-card-desc">Lists every model currently living in RAM or VRAM. Use this to see what's hot
+                  in memory, how long it'll stay loaded, and how much memory it's consuming — before you run out of
+                  headroom.</div>
+              </div>
+            </div>
+            <div class="api-code-block">
+              <button class="api-copy-btn">Copy</button>
+              <pre><code>curl http://localhost:11434/api/ps</code></pre>
+            </div>
+          </div>
+
+          <!-- Unload model -->
+          <div class="api-card">
+            <div class="api-card-header">
+              <span class="api-method-badge badge-action">ACTION</span>
+              <div class="api-card-meta">
+                <div class="api-card-endpoint">Unload / Eject a Model</div>
+                <div class="api-card-desc">Set <code>keep_alive</code> to <code>0</code> via the generate endpoint to
+                  immediately evict a model from memory. This is the fastest way to free up RAM or VRAM without
+                  restarting anything.</div>
+              </div>
+            </div>
+            <div class="api-code-block">
+              <button class="api-copy-btn">Copy</button>
+              <pre><code>curl http://localhost:11434/api/generate -d '{
+  "model": "llama3.2:1b",
+  "keep_alive": 0
+}'</code></pre>
+            </div>
+          </div>
+
+          <!-- Preload model -->
+          <div class="api-card">
+            <div class="api-card-header">
+              <span class="api-method-badge badge-action">ACTION</span>
+              <div class="api-card-meta">
+                <div class="api-card-endpoint">Preload / Warm Up a Model</div>
+                <div class="api-card-desc">Set <code>keep_alive</code> to <code>-1</code> (no prompt needed) to
+                  force-load a model into memory without running any inference. The model will stay loaded indefinitely,
+                  so the very first real request responds instantly.</div>
+              </div>
+            </div>
+            <div class="api-code-block">
+              <button class="api-copy-btn">Copy</button>
+              <pre><code>curl http://localhost:11434/api/generate -d '{
+  "model": "llama3.2:1b",
+  "keep_alive": -1
+}'</code></pre>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 3: Library & Disk Management -->
+        <div class="api-section">
+          <div class="api-section-title"><span class="section-num">3</span> Library &amp; Disk Management</div>
+
+          <!-- /api/tags -->
+          <div class="api-card">
+            <div class="api-card-header">
+              <span class="api-method-badge badge-get">GET</span>
+              <div class="api-card-meta">
+                <div class="api-card-endpoint">/api/tags</div>
+                <div class="api-card-desc">Returns a list of all models saved to disk (in your Docker volume or local
+                  Ollama store). This tells you what's <em>available</em> to load — not necessarily what's in memory
+                  right now. Compare with <code>/api/ps</code> to see which ones are currently active.</div>
+              </div>
+            </div>
+            <div class="api-code-block">
+              <button class="api-copy-btn">Copy</button>
+              <pre><code>curl http://localhost:11434/api/tags</code></pre>
+            </div>
+          </div>
+
+          <!-- /api/pull -->
+          <div class="api-card">
+            <div class="api-card-header">
+              <span class="api-method-badge badge-post">POST</span>
+              <div class="api-card-meta">
+                <div class="api-card-endpoint">/api/pull</div>
+                <div class="api-card-desc">Downloads a model from the Ollama model library to your local storage. This
+                  is exactly what the Model Manager UI does behind the scenes. Add <code>"stream": true</code> to watch
+                  live download progress.</div>
+              </div>
+            </div>
+            <div class="api-code-block">
+              <button class="api-copy-btn">Copy</button>
+              <pre><code>curl http://localhost:11434/api/pull -d '{
+  "model": "deepseek-r1:1.5b"
+}'</code></pre>
+            </div>
+          </div>
+
+          <!-- /api/show -->
+          <div class="api-card">
+            <div class="api-card-header">
+              <span class="api-method-badge badge-post">POST</span>
+              <div class="api-card-meta">
+                <div class="api-card-endpoint">/api/show</div>
+                <div class="api-card-desc">Returns the full metadata for a specific model: its Modelfile, system prompt,
+                  parameter count, quantization level, template, and license. Useful when you need to inspect exactly
+                  how a model is configured before using it.</div>
+              </div>
+            </div>
+            <div class="api-code-block">
+              <button class="api-copy-btn">Copy</button>
+              <pre><code>curl http://localhost:11434/api/show -d '{ "name": "llama3.2:1b" }'</code></pre>
+            </div>
+          </div>
+
+          <!-- /api/delete -->
+          <div class="api-card">
+            <div class="api-card-header">
+              <span class="api-method-badge badge-delete">DELETE</span>
+              <div class="api-card-meta">
+                <div class="api-card-endpoint">/api/delete</div>
+                <div class="api-card-desc">Permanently removes a model from local storage, freeing disk space.
+                  <strong>This cannot be undone</strong> — you'd have to re-download the model. Use
+                  <code>-X DELETE</code> with curl because this endpoint uses the HTTP DELETE method.</div>
+              </div>
+            </div>
+            <div class="api-code-block">
+              <button class="api-copy-btn">Copy</button>
+              <pre><code>curl -X DELETE http://localhost:11434/api/delete -d '{ "name": "stablelm2:1.6b" }'</code></pre>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 4: Advanced Utilities -->
+        <div class="api-section">
+          <div class="api-section-title"><span class="section-num">4</span> Advanced Utilities</div>
+
+          <!-- /api/embed -->
+          <div class="api-card">
+            <div class="api-card-header">
+              <span class="api-method-badge badge-post">POST</span>
+              <div class="api-card-meta">
+                <div class="api-card-endpoint">/api/embed</div>
+                <div class="api-card-desc">Converts text into a numerical vector (embedding). Embeddings capture the
+                  <em>meaning</em> of text in a way that machines can compare and search. This is the foundation of RAG
+                  (Retrieval-Augmented Generation) and vector database workflows — the model "understands" your document
+                  so you can search it by concept instead of keyword.</div>
+              </div>
+            </div>
+            <div class="api-code-block">
+              <button class="api-copy-btn">Copy</button>
+              <pre><code>curl http://localhost:11434/api/embed -d '{
+  "model": "llama3.2:1b",
+  "input": "Technical lab documentation for CyberLessons101"
+}'</code></pre>
+            </div>
+          </div>
+
+          <!-- /api/create -->
+          <div class="api-card">
+            <div class="api-card-header">
+              <span class="api-method-badge badge-post">POST</span>
+              <div class="api-card-meta">
+                <div class="api-card-endpoint">/api/create</div>
+                <div class="api-card-desc">Builds a brand-new custom model from a Modelfile string — no file on disk
+                  required. You can bake in a permanent system prompt, change the base model, or alter generation
+                  parameters. The result is a standalone model you can reference by name just like any other.</div>
+              </div>
+            </div>
+            <div class="api-code-block">
+              <button class="api-copy-btn">Copy</button>
+              <pre><code>curl http://localhost:11434/api/create -d '{
+  "name": "iCSI-Assistant",
+  "modelfile": "FROM llama3.2:1b\nSYSTEM You are an expert in blockchain security."
+}'</code></pre>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /.api-content -->
+    </div><!-- /#api-body -->
+  </div><!-- /#api-overlay -->
 
   <!-- Roll Your Own Modal -->
   <div class="modal-overlay" id="ryo-modal">
@@ -1078,6 +1612,40 @@
 
     /* Enter key submits in modal */
     ryoInput.addEventListener('keydown', e => { if (e.key === 'Enter') ryoInstall.click(); });
+
+    /* ---- API Info overlay ---- */
+    const apiOverlay = document.getElementById('api-overlay');
+    const apiInfoBtn = document.getElementById('api-info-btn');
+    const apiCloseBtn = document.getElementById('api-close-btn');
+
+    function openApiOverlay(e) {
+      e.preventDefault();
+      apiOverlay.classList.add('open');
+      document.getElementById('api-body').scrollTop = 0;
+    }
+    function closeApiOverlay() { apiOverlay.classList.remove('open'); }
+
+    apiInfoBtn.addEventListener('click', openApiOverlay);
+    apiCloseBtn.addEventListener('click', closeApiOverlay);
+
+    /* Close overlay with Escape key */
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeApiOverlay(); });
+
+    /* Copy button logic */
+    document.querySelectorAll('.api-copy-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const code = btn.closest('.api-code-block').querySelector('code').textContent;
+        navigator.clipboard.writeText(code).then(() => {
+          btn.textContent = 'Copied!';
+          btn.classList.add('copied');
+          setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2000);
+        }).catch(() => {
+          btn.textContent = 'Failed';
+          setTimeout(() => { btn.textContent = 'Copy'; }, 2000);
+        });
+      });
+    });
+
 
     /* Auto-grow textarea */
     input.addEventListener('input', () => {
