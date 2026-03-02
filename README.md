@@ -45,22 +45,33 @@ You'll see a ChatGPT-style interface where you can type prompts and get response
 
 ```
 .
-├── setup.sh            # One-command Ollama + model deployment
+├── setup.sh            # One-command full deployment (Ollama + model + Chat UI)
+├── delete_all.sh       # Stops and removes all containers and images
 ├── web/
-│   ├── index.html      # Chat UI (dark theme, async, spinner)
+│   ├── index.html      # Chat UI (dark theme, async, model manager)
 │   ├── nginx.conf      # Reverse proxy config (routes API to Ollama)
 │   └── Dockerfile      # Lightweight nginx:alpine container
+├── image/              # Screenshots used in README
 └── README.md
 ```
 
 ---
 
-## 🛑 Stopping Everything
+## 🛑 Tearing Down / Cleanup
+
+A cleanup script is included to stop and remove all MiniJarvis containers and images in one step:
 
 ```bash
-sudo docker stop ollama-chat ollama
-sudo docker rm ollama-chat ollama
+sudo ./delete_all.sh
 ```
+
+This will:
+1. Stop and remove the `ollama-chat` (web UI) container
+2. Stop and remove the `ollama` container
+3. Delete the `ollama-chat-ui` image
+4. Delete the `ollama/ollama` image
+
+After running, you can do a clean re-deploy at any time simply by running `sudo ./setup.sh` again.
 
 ---
 
