@@ -1,4 +1,8 @@
-# Ollama-in-a-Box
+# MiniJarvis: Local LLM Access for the Classroom
+
+<p align="center">
+  <img src="image/Front-Page.png" alt="MiniJarvis Web UI Screenshot" width="800" />
+</p>
 
 **Your own private AI — running locally, no cloud required.**
 
