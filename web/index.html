@@ -1176,6 +1176,179 @@
       color: #4ade80;
       border-color: #4ade80;
     }
+
+    /* ---- Context Window Toggle ---- */
+    .ctx-toggle-btn {
+      background: var(--bg);
+      color: var(--text-muted);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 6px 14px;
+      font-family: inherit;
+      font-size: .82rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      transition: color .2s, border-color .2s, background .2s, box-shadow .2s;
+      white-space: nowrap;
+    }
+
+    .ctx-toggle-btn:hover {
+      color: var(--text);
+      border-color: var(--accent);
+      background: var(--accent-glow);
+    }
+
+    .ctx-toggle-btn.active {
+      background: rgba(74, 222, 128, 0.12);
+      border-color: #4ade80;
+      color: #4ade80;
+      box-shadow: 0 0 14px rgba(74, 222, 128, 0.25);
+    }
+
+    .ctx-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--text-muted);
+      transition: background .2s, box-shadow .2s;
+      flex-shrink: 0;
+    }
+
+    .ctx-toggle-btn.active .ctx-dot {
+      background: #4ade80;
+      box-shadow: 0 0 6px rgba(74, 222, 128, 0.8);
+    }
+
+    /* ---- Configure Button (appears next to toggle when active) ---- */
+    .ctx-configure-btn {
+      background: var(--bg);
+      color: var(--text-muted);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 6px 12px;
+      font-family: inherit;
+      font-size: .82rem;
+      font-weight: 500;
+      cursor: pointer;
+      display: none;
+      align-items: center;
+      gap: 5px;
+      transition: color .2s, border-color .2s, background .2s;
+      white-space: nowrap;
+    }
+
+    .ctx-configure-btn.visible {
+      display: flex;
+    }
+
+    .ctx-configure-btn:hover {
+      color: var(--text);
+      border-color: #4ade80;
+      background: rgba(74, 222, 128, 0.08);
+    }
+
+    /* ---- Context Configure Modal ---- */
+    #ctx-config-modal .modal {
+      width: 460px;
+    }
+
+    .ctx-config-row {
+      margin-bottom: 20px;
+    }
+
+    .ctx-config-row label {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: .85rem;
+      font-weight: 500;
+      margin-bottom: 10px;
+      color: var(--text);
+    }
+
+    .ctx-config-row label span {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .82rem;
+      color: var(--accent);
+      background: rgba(0, 212, 255, 0.08);
+      padding: 2px 10px;
+      border-radius: 6px;
+      border: 1px solid rgba(0, 212, 255, 0.2);
+    }
+
+    .ctx-config-row input[type=range] {
+      width: 100%;
+      accent-color: #4ade80;
+      cursor: pointer;
+      height: 6px;
+    }
+
+    .ctx-config-hint {
+      font-size: .76rem;
+      color: var(--text-muted);
+      margin-top: 6px;
+      line-height: 1.5;
+    }
+
+    .ctx-stat-box {
+      background: rgba(0, 212, 255, 0.04);
+      border: 1px solid rgba(0, 212, 255, 0.12);
+      border-radius: 10px;
+      padding: 12px 16px;
+      margin-bottom: 20px;
+      display: flex;
+      gap: 24px;
+    }
+
+    .ctx-stat {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .ctx-stat-label {
+      font-size: .68rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: .5px;
+      font-weight: 600;
+    }
+
+    .ctx-stat-value {
+      font-size: 1rem;
+      font-weight: 700;
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--accent);
+    }
+
+    /* ---- Context banner in chat ---- */
+    .ctx-banner {
+      max-width: 720px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 7px 14px;
+      border-radius: 8px;
+      font-size: .75rem;
+      font-family: 'JetBrains Mono', monospace;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .ctx-banner.on {
+      background: rgba(74, 222, 128, 0.06);
+      border: 1px solid rgba(74, 222, 128, 0.2);
+      color: #4ade80;
+    }
+
+    .ctx-banner.off {
+      background: rgba(248, 113, 113, 0.06);
+      border: 1px solid rgba(248, 113, 113, 0.2);
+      color: #f87171;
+    }
   </style>
 </head>
 
@@ -1204,6 +1377,16 @@
           </div>
         </div>
       </div>
+
+      <!-- Context Window Toggle -->
+      <button class="ctx-configure-btn" id="ctx-configure-btn" title="Configure context window parameters">
+        ⚙️ Configure Context Window
+      </button>
+      <button class="ctx-toggle-btn" id="ctx-toggle-btn">
+        <span class="ctx-dot"></span>
+        <span id="ctx-toggle-label">Context Window Off</span>
+      </button>
+
       <a href="https://github.com/androidteacher/ollama-chat-docker-deploy-llama3.2-1b" target="_blank">GitHub</a>
       <div class="info-dropdown" id="info-dropdown">
         <button class="info-dropdown-btn" id="info-dropdown-btn">
@@ -2207,6 +2390,42 @@ if (role === 'bot') {
     </div><!-- /#api-body -->
   </div><!-- /#api-overlay -->
 
+  <!-- Context Window Configure Modal -->
+  <div class="modal-overlay" id="ctx-config-modal">
+    <div class="modal">
+      <h2>⚙️ Context Window Settings</h2>
+
+      <!-- Live stats bar -->
+      <div class="ctx-stat-box">
+        <div class="ctx-stat">
+          <div class="ctx-stat-label">Turns Stored</div>
+          <div class="ctx-stat-value" id="ctx-stat-turns">0</div>
+        </div>
+        <div class="ctx-stat">
+          <div class="ctx-stat-label">Max Turns</div>
+          <div class="ctx-stat-value" id="ctx-stat-max">10</div>
+        </div>
+        <div class="ctx-stat">
+          <div class="ctx-stat-label">~Est. Tokens</div>
+          <div class="ctx-stat-value" id="ctx-stat-tokens">0</div>
+        </div>
+      </div>
+
+      <!-- Max turns slider -->
+      <div class="ctx-config-row">
+        <label>Max conversation turns sent with each prompt
+          <span id="ctx-max-turns-display">10</span>
+        </label>
+        <input type="range" id="ctx-max-turns" min="2" max="40" step="2" value="10" />
+        <div class="ctx-config-hint">Each "turn" = one user message + one assistant reply. Smaller = less RAM usage &amp; faster responses. Larger = model remembers more of the conversation.</div>
+      </div>
+
+      <div class="modal-actions">
+        <button class="modal-cancel" id="ctx-config-close">Done</button>
+      </div>
+    </div>
+  </div>
+
   <!-- Roll Your Own Modal -->
   <div class="modal-overlay" id="ryo-modal">
     <div class="modal">
@@ -2260,6 +2479,92 @@ if (role === 'bot') {
     const activeModelLabel = document.getElementById('active-model-label');
     let busy = false;
     let activeModel = null;
+
+    /* ---- Context Window State ---- */
+    let contextActive = false;
+    let contextMaxTurns = 10;          // each turn = 1 user msg + 1 assistant msg
+    let conversationHistory = [];      // array of {role, content} objects
+
+    const ctxToggleBtn   = document.getElementById('ctx-toggle-btn');
+    const ctxToggleLabel = document.getElementById('ctx-toggle-label');
+    const ctxConfigureBtn = document.getElementById('ctx-configure-btn');
+
+    function updateCtxButtonUI() {
+      if (contextActive) {
+        ctxToggleBtn.classList.add('active');
+        ctxToggleLabel.textContent = 'Context Window Active';
+        ctxConfigureBtn.classList.add('visible');
+      } else {
+        ctxToggleBtn.classList.remove('active');
+        ctxToggleLabel.textContent = 'Context Window Off';
+        ctxConfigureBtn.classList.remove('visible');
+      }
+    }
+
+    function appendCtxBanner(on) {
+      const banner = document.createElement('div');
+      banner.className = 'ctx-banner ' + (on ? 'on' : 'off');
+      banner.textContent = on
+        ? '🟢 Context Window Active — conversation history will be sent with each prompt'
+        : '🔴 Context Window Off — history cleared, single-turn mode resumed';
+      chat.appendChild(banner);
+      chat.scrollTop = chat.scrollHeight;
+    }
+
+    ctxToggleBtn.addEventListener('click', () => {
+      contextActive = !contextActive;
+      if (!contextActive) {
+        // Clear history when turning off
+        conversationHistory = [];
+      }
+      updateCtxButtonUI();
+      appendCtxBanner(contextActive);
+      updateCtxStats();
+    });
+
+    /* ---- Context Configure Modal ---- */
+    const ctxConfigModal    = document.getElementById('ctx-config-modal');
+    const ctxConfigClose    = document.getElementById('ctx-config-close');
+    const ctxMaxTurnsSlider = document.getElementById('ctx-max-turns');
+    const ctxMaxTurnsDisp   = document.getElementById('ctx-max-turns-display');
+    const ctxStatTurns      = document.getElementById('ctx-stat-turns');
+    const ctxStatMax        = document.getElementById('ctx-stat-max');
+    const ctxStatTokens     = document.getElementById('ctx-stat-tokens');
+
+    function estimateTokens() {
+      // Rough estimate: ~1 token per 4 characters of text
+      const totalChars = conversationHistory.reduce((sum, m) => sum + m.content.length, 0);
+      return Math.round(totalChars / 4);
+    }
+
+    function updateCtxStats() {
+      const turns = Math.floor(conversationHistory.length / 2);
+      ctxStatTurns.textContent = turns;
+      ctxStatMax.textContent   = contextMaxTurns;
+      ctxStatTokens.textContent = estimateTokens().toLocaleString();
+    }
+
+    ctxConfigureBtn.addEventListener('click', () => {
+      ctxMaxTurnsSlider.value   = contextMaxTurns;
+      ctxMaxTurnsDisp.textContent = contextMaxTurns;
+      updateCtxStats();
+      ctxConfigModal.classList.add('open');
+    });
+
+    ctxMaxTurnsSlider.addEventListener('input', () => {
+      contextMaxTurns = parseInt(ctxMaxTurnsSlider.value);
+      ctxMaxTurnsDisp.textContent = contextMaxTurns;
+      ctxStatMax.textContent = contextMaxTurns;
+      // Trim history if new limit is smaller
+      const maxMessages = contextMaxTurns * 2;
+      if (conversationHistory.length > maxMessages) {
+        conversationHistory = conversationHistory.slice(conversationHistory.length - maxMessages);
+      }
+      updateCtxStats();
+    });
+
+    ctxConfigClose.addEventListener('click', () => ctxConfigModal.classList.remove('open'));
+    ctxConfigModal.addEventListener('click', e => { if (e.target === ctxConfigModal) ctxConfigModal.classList.remove('open'); });
 
     /* Known model catalog (matches setup.sh) */
     const KNOWN_MODELS = [
@@ -2656,7 +2961,7 @@ if (role === 'bot') {
 
     /* Close any overlay with Escape key */
     document.addEventListener('keydown', e => {
-      if (e.key === 'Escape') { closeApiOverlay(); closeCodeflowOverlay(); closeLlmcompOverlay(); closeTwpOverlay(); closeCwqOverlay(); }
+      if (e.key === 'Escape') { closeApiOverlay(); closeCodeflowOverlay(); closeLlmcompOverlay(); closeTwpOverlay(); closeCwqOverlay(); ctxConfigModal.classList.remove('open'); }
     });
 
     /* Copy button logic (covers both overlays) */
@@ -2701,23 +3006,63 @@ if (role === 'bot') {
       const spinnerEl = appendSpinner();
 
       try {
-        const res = await fetch('/api/generate', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            model: activeModel,
-            prompt: text,
-            stream: false
-          })
-        });
+        let responseText;
 
-        if (!res.ok) throw new Error(`Server returned ${res.status}`);
-        const data = await res.json();
+        if (contextActive) {
+          /* --- /api/chat (context-aware, multi-turn) --- */
+          // Add new user message to history first
+          conversationHistory.push({ role: 'user', content: text });
+
+          // Trim to max turns window (each turn = 1 user + 1 assistant)
+          const maxMessages = contextMaxTurns * 2;
+          if (conversationHistory.length > maxMessages) {
+            conversationHistory = conversationHistory.slice(conversationHistory.length - maxMessages);
+          }
+
+          const res = await fetch('/api/chat', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              model: activeModel,
+              messages: conversationHistory,
+              stream: false
+            })
+          });
+
+          if (!res.ok) throw new Error(`Server returned ${res.status}`);
+          const data = await res.json();
+          responseText = data.message?.content || '(no response)';
+
+          // Store the assistant reply in history
+          conversationHistory.push({ role: 'assistant', content: responseText });
+          updateCtxStats();
+
+        } else {
+          /* --- /api/generate (stateless, single-turn) --- */
+          const res = await fetch('/api/generate', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              model: activeModel,
+              prompt: text,
+              stream: false
+            })
+          });
+
+          if (!res.ok) throw new Error(`Server returned ${res.status}`);
+          const data = await res.json();
+          responseText = data.response || '(no response)';
+        }
+
         spinnerEl.remove();
-        appendMsg('bot', data.response || '(no response)');
+        appendMsg('bot', responseText);
       } catch (err) {
         spinnerEl.remove();
         appendMsg('bot', '⚠️ Error: ' + err.message);
+        // If context mode, remove the user message we optimistically added
+        if (contextActive && conversationHistory.length && conversationHistory[conversationHistory.length - 1].role === 'user') {
+          conversationHistory.pop();
+        }
       } finally {
         busy = false;
         btn.disabled = false;
