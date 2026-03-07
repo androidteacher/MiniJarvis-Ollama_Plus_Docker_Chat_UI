@@ -37,6 +37,8 @@ echo -e "\n${CYAN}[*] Starting Ollama container...${NC}"
 docker run -d \
   -v ollama:/root/.ollama \
   -p 11434:11434 \
+  -e OLLAMA_ORIGINS="*" \
+  --name ollama \
   --name ollama \
   ollama/ollama
 
