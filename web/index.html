@@ -2703,6 +2703,40 @@ if (role === 'bot') {
         item.append(dot, info, actionBtn, progress);
         modelListEl.appendChild(item);
       });
+
+      /* Third pass: render any installed model not already shown above
+         (e.g. models pulled via shell / HuggingFace hf.co URLs) */
+      const shownNames = new Set([
+        ...KNOWN_MODELS.map(m => m.name),
+        ...customModels
+      ]);
+      installedModels.forEach(name => {
+        if (shownNames.has(name)) return; /* already rendered */
+        const isActive = name === activeModel;
+        const item = document.createElement('div');
+        item.className = 'model-item' + (isActive ? ' active' : '');
+
+        const dot = document.createElement('div');
+        dot.className = 'model-dot installed';
+
+        const info = document.createElement('div');
+        info.className = 'model-info';
+        info.innerHTML = `<div class="model-name">${name}</div><div class="model-desc">Discovered model</div>`;
+        info.addEventListener('click', () => { setActiveModel(name); modelPanel.classList.remove('open'); });
+
+        const actionBtn = document.createElement('button');
+        actionBtn.className = 'model-action remove';
+        actionBtn.textContent = 'Remove';
+        const progress = document.createElement('div');
+        progress.className = 'model-progress';
+        progress.style.display = 'none';
+        actionBtn.addEventListener('click', async (e) => {
+          e.stopPropagation();
+          await removeModel(name, actionBtn, progress);
+        });
+        item.append(dot, info, actionBtn, progress);
+        modelListEl.appendChild(item);
+      });
     }
 
     /* Install model with streaming progress */
